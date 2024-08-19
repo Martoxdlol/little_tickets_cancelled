@@ -8,9 +8,6 @@ const config = {
     semi: false,
     trailingComma: 'all',
     singleQuote: true,
-    importOrder: ['^~/server/(.*)$', '^~/trpc/(.*)$', '^~/app/(.*)$', '^[./]'],
-    importOrderSeparation: true,
-    importOrderSortSpecifiers: true,
 }
 
 export default config

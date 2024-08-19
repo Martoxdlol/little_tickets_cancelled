@@ -22,6 +22,7 @@ export const users = createTable('user', {
     googleId: varchar('google_id', { length: 256 }).unique(undefined, {
         nulls: 'distinct',
     }),
+    locale: varchar('locale', { length: 5 }).default('en').notNull(),
     createdAt,
     updatedAt,
 })

@@ -35,6 +35,7 @@ export class LuciaAuthAdapter implements Adapter {
             attributes: {
                 name: session.user.name,
                 githubId: session.user.githubId,
+                locale: session.user.locale,
             },
             id: session.user.id,
         }
