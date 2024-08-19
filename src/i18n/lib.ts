@@ -4,6 +4,13 @@ export type LangKey = (typeof langs)[number]
 
 export type StringValues = Partial<Record<LangKey, string>>
 
+export function validateLocale(locale: string): LangKey {
+    if (langs.includes(locale as LangKey)) {
+        return locale as LangKey
+    }
+
+    return 'en'
+}
 export class I18NString {
     values: StringValues
 

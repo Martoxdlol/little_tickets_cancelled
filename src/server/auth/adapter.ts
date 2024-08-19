@@ -1,7 +1,6 @@
+import { Database, schema } from '../db'
 import { eq } from 'drizzle-orm'
 import { Adapter, DatabaseSession, DatabaseUser, UserId } from 'lucia'
-
-import { Database, schema } from '../db'
 
 export class LuciaAuthAdapter implements Adapter {
     database: Database
@@ -36,6 +35,7 @@ export class LuciaAuthAdapter implements Adapter {
                 name: session.user.name,
                 githubId: session.user.githubId,
                 locale: session.user.locale,
+                onboardingCompleted: !!session.user.onboardingCompletedAt,
             },
             id: session.user.id,
         }

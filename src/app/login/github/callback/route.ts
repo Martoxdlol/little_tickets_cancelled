@@ -1,7 +1,11 @@
 import { OAuth2RequestError } from 'arctic'
 import { cookies } from 'next/headers'
-
-import { github, lucia } from '~/server/auth'
+import {
+    consumeAuthLocaleCookie,
+    consumeRedirectPathCookie,
+    github,
+    lucia,
+} from '~/server/auth'
 import { db, schema } from '~/server/db'
 
 export async function GET(request: Request): Promise<Response> {
@@ -23,12 +27,13 @@ export async function GET(request: Request): Promise<Response> {
             },
         })
         const githubUser: GitHubUser = await githubUserResponse.json()
-        console.log(githubUser)
+
         const [user] = await db
             .insert(schema.users)
             .values({
-                username: githubUser.login,
+                githubUsername: githubUser.login,
                 name: githubUser.login,
+                locale: consumeAuthLocaleCookie(),
                 email: githubUser.email,
                 picture: githubUser.avatar_url,
                 githubId: githubUser.id,
@@ -36,7 +41,7 @@ export async function GET(request: Request): Promise<Response> {
             .onConflictDoUpdate({
                 target: [schema.users.githubId],
                 set: {
-                    username: githubUser.login,
+                    githubUsername: githubUser.login,
                     email: githubUser.email,
                     picture: githubUser.avatar_url,
                 },
@@ -56,10 +61,7 @@ export async function GET(request: Request): Promise<Response> {
             sessionCookie.attributes,
         )
 
-        const redirectPath = cookies().get('redirect_path')?.value ?? '/'
-        cookies().set('redirect_path', '', {
-            expires: new Date(0),
-        })
+        const redirectPath = consumeRedirectPathCookie()
 
         return new Response(null, {
             status: 302,

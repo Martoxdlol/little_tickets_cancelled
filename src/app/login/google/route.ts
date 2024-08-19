@@ -1,7 +1,10 @@
 import { generateCodeVerifier, generateState } from 'arctic'
 import { cookies } from 'next/headers'
-
-import { google } from '~/server/auth'
+import {
+    google,
+    setAuthLocaleCookie,
+    setRedirectPathCookie,
+} from '~/server/auth'
 
 export async function GET(request: Request): Promise<Response> {
     const state = generateState()
@@ -28,15 +31,8 @@ export async function GET(request: Request): Promise<Response> {
     })
 
     const redirectPath = new URL(request.url).searchParams.get('redirect_path')
-    if (redirectPath) {
-        cookies().set('redirect_path', '/', {
-            path: redirectPath,
-            secure: process.env.NODE_ENV === 'production',
-            httpOnly: true,
-            maxAge: 60 * 10,
-            sameSite: 'lax',
-        })
-    }
+    setRedirectPathCookie(redirectPath)
+    setAuthLocaleCookie()
 
     return Response.redirect(url)
 }

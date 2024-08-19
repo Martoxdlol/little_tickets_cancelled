@@ -6,13 +6,11 @@
  * TL;DR - This is where all the tRPC server stuff is created and plugged in. The pieces you will
  * need to use are documented accordingly near the end.
  */
+import { getServerAuthSession } from '../auth/react'
 import { TRPCError, initTRPC } from '@trpc/server'
 import superjson from 'superjson'
 import { ZodError } from 'zod'
-
 import { db } from '~/server/db'
-
-import { getServerAuthSession } from '../auth/react'
 
 /**
  * 1. CONTEXT
@@ -112,9 +110,9 @@ export const publicProcedure = t.procedure.use(timingMiddleware)
 export const protectedProcedure = t.procedure
     .use(timingMiddleware)
     .use(async ({ ctx, next }) => {
-        const { session, user } = await getServerAuthSession()
+        const session = await getServerAuthSession()
 
-        if (!session || !user) {
+        if (!session) {
             throw new TRPCError({
                 code: 'UNAUTHORIZED',
             })
@@ -123,7 +121,7 @@ export const protectedProcedure = t.procedure
         return next({
             ctx: {
                 ...ctx,
-                session: { ...session, user },
+                session,
             },
         })
     })

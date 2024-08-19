@@ -1,8 +1,8 @@
 'use client'
 
+import { type LangKey, validateLocale } from './lib'
 import { createContext, ReactNode, useContext } from 'react'
 import { useSession } from '~/components/auth/auth-provider'
-import { type LangKey, langs } from './lib'
 
 const langCtx = createContext<{ lang: LangKey }>({ lang: 'en' })
 
@@ -21,16 +21,10 @@ export function LangProvider({
     lang: string
     children: ReactNode
 }) {
-    if (langs.includes(lang as LangKey)) {
-        return (
-            <langCtx.Provider value={{ lang: lang as LangKey }}>
-                {children}
-            </langCtx.Provider>
-        )
-    }
-
     return (
-        <langCtx.Provider value={{ lang: 'en' }}>{children}</langCtx.Provider>
+        <langCtx.Provider value={{ lang: validateLocale(lang) }}>
+            {children}
+        </langCtx.Provider>
     )
 }
 

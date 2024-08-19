@@ -1,8 +1,8 @@
 'use client'
 
-import { createContext, useContext, useMemo } from 'react'
 import { useLang } from './lang-provider'
 import { type AppStrings, createAppStrings } from './strings'
+import { createContext, useContext, useMemo } from 'react'
 
 const appStringsCtx = createContext<AppStrings>(createAppStrings('en'))
 

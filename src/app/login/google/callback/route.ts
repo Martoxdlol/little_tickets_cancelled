@@ -1,7 +1,11 @@
 import { OAuth2RequestError } from 'arctic'
 import { cookies } from 'next/headers'
-
-import { google, lucia } from '~/server/auth'
+import {
+    consumeAuthLocaleCookie,
+    consumeRedirectPathCookie,
+    google,
+    lucia,
+} from '~/server/auth'
 import { db, schema } from '~/server/db'
 
 export async function GET(request: Request): Promise<Response> {
@@ -48,6 +52,7 @@ export async function GET(request: Request): Promise<Response> {
         const [user] = await db
             .insert(schema.users)
             .values({
+                locale: consumeAuthLocaleCookie(),
                 name: googleUser.name,
                 googleId: googleUser.sub,
                 picture: googleUser.picture,
@@ -56,7 +61,6 @@ export async function GET(request: Request): Promise<Response> {
             .onConflictDoUpdate({
                 target: [schema.users.googleId],
                 set: {
-                    name: googleUser.name,
                     picture: googleUser.picture,
                 },
             })
@@ -75,10 +79,7 @@ export async function GET(request: Request): Promise<Response> {
             sessionCookie.attributes,
         )
 
-        const redirectPath = cookies().get('redirect_path')?.value ?? '/'
-        cookies().set('redirect_path', '', {
-            expires: new Date(0),
-        })
+        const redirectPath = consumeRedirectPathCookie()
 
         return new Response(null, {
             status: 302,

@@ -26,6 +26,12 @@ export function AuthProvider(props: {
         )
     }
 
+    if (!props.session.user.onboardingCompleted) {
+        return redirect(
+            `/onboarding?redirect_path=${encodeURIComponent(redirectPath)}`,
+        )
+    }
+
     return (
         <authCtx.Provider value={{ session: props.session }}>
             {props.children}
