@@ -38,8 +38,6 @@ export async function GET(request: Request): Promise<Response> {
         )
         const googleUser: GoogleUser = await googleUserResponse.json()
 
-        console.log(googleUser)
-
         if (googleUser.email_verified === false) {
             return new Response(null, {
                 status: 400,
@@ -76,10 +74,15 @@ export async function GET(request: Request): Promise<Response> {
             sessionCookie.attributes,
         )
 
+        const redirectPath = cookies().get('redirect_path')?.value ?? '/'
+        cookies().set('redirect_path', '', {
+            expires: new Date(0),
+        })
+
         return new Response(null, {
             status: 302,
             headers: {
-                Location: '/',
+                Location: redirectPath,
             },
         })
     } catch (e) {

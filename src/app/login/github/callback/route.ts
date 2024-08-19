@@ -55,10 +55,15 @@ export async function GET(request: Request): Promise<Response> {
             sessionCookie.attributes,
         )
 
+        const redirectPath = cookies().get('redirect_path')?.value ?? '/'
+        cookies().set('redirect_path', '', {
+            expires: new Date(0),
+        })
+
         return new Response(null, {
             status: 302,
             headers: {
-                Location: '/',
+                Location: redirectPath,
             },
         })
     } catch (e) {

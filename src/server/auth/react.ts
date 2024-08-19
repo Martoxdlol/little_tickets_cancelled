@@ -41,3 +41,18 @@ export const validateRequest = cache(
         return result
     },
 )
+
+export async function getServerAuthSession(): Promise<
+    (Session & { user: User }) | null
+> {
+    const { user, session } = await validateRequest()
+
+    if (!user || !session) {
+        return null
+    }
+
+    return {
+        ...session,
+        user,
+    }
+}

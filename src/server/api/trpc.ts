@@ -11,7 +11,7 @@ import superjson from 'superjson'
 import { ZodError } from 'zod'
 
 import { db } from '~/server/db'
-import { validateRequest } from '../auth/react'
+import { getServerAuthSession } from '../auth/react'
 
 /**
  * 1. CONTEXT
@@ -111,7 +111,7 @@ export const publicProcedure = t.procedure.use(timingMiddleware)
 export const protectedProcedure = t.procedure
     .use(timingMiddleware)
     .use(async ({ ctx, next }) => {
-        const { session, user } = await validateRequest()
+        const { session, user } = await getServerAuthSession()
 
         if (!session || !user) {
             throw new TRPCError({
