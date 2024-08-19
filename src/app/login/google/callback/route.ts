@@ -1,43 +1,64 @@
 import { OAuth2RequestError } from 'arctic'
 import { cookies } from 'next/headers'
-import { github, lucia } from '~/server/auth'
+import { google, lucia } from '~/server/auth'
 import { db, schema } from '~/server/db'
 
 export async function GET(request: Request): Promise<Response> {
     const url = new URL(request.url)
     const code = url.searchParams.get('code')
     const state = url.searchParams.get('state')
-    const storedState = cookies().get('github_oauth_state')?.value ?? null
-    if (!code || !state || !storedState || state !== storedState) {
+    const storedState = cookies().get('google_oauth_state')?.value ?? null
+    const storedCodeVerifier = cookies().get('code_verifier')?.value ?? null
+
+    if (
+        !code ||
+        !state ||
+        !storedState ||
+        !storedCodeVerifier ||
+        state !== storedState
+    ) {
         return new Response(null, {
             status: 400,
         })
     }
 
     try {
-        const tokens = await github.validateAuthorizationCode(code)
-        const githubUserResponse = await fetch('https://api.github.com/user', {
-            headers: {
-                Authorization: `Bearer ${tokens.accessToken}`,
+        const tokens = await google.validateAuthorizationCode(
+            code,
+            storedCodeVerifier,
+        )
+
+        const googleUserResponse = await fetch(
+            'https://www.googleapis.com/oauth2/v3/userinfo',
+            {
+                headers: {
+                    Authorization: `Bearer ${tokens.accessToken}`,
+                },
             },
-        })
-        const githubUser: GitHubUser = await githubUserResponse.json()
-        console.log(githubUser)
+        )
+        const googleUser: GoogleUser = await googleUserResponse.json()
+
+        console.log(googleUser)
+
+        if (googleUser.email_verified === false) {
+            return new Response(null, {
+                status: 400,
+            })
+        }
+
         const [user] = await db
             .insert(schema.users)
             .values({
-                username: githubUser.login,
-                name: githubUser.login,
-                email: githubUser.email,
-                picture: githubUser.avatar_url,
-                githubId: githubUser.id,
+                name: googleUser.name,
+                googleId: googleUser.sub,
+                picture: googleUser.picture,
+                email: googleUser.email,
             })
             .onConflictDoUpdate({
-                target: [schema.users.githubId],
+                target: [schema.users.googleId],
                 set: {
-                    username: githubUser.login,
-                    email: githubUser.email,
-                    picture: githubUser.avatar_url,
+                    name: googleUser.name,
+                    picture: googleUser.picture,
                 },
             })
             .returning()
@@ -78,9 +99,12 @@ export async function GET(request: Request): Promise<Response> {
     }
 }
 
-interface GitHubUser {
-    id: number
-    login: string
-    avatar_url: string
-    email: string | null
+interface GoogleUser {
+    sub: string
+    name: string
+    given_name: string
+    family_name: string
+    picture: string
+    email: string
+    email_verified: boolean
 }

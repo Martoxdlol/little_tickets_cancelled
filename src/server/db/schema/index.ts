@@ -1,5 +1,5 @@
 import { relations, sql } from 'drizzle-orm'
-import { index, serial, timestamp, varchar } from 'drizzle-orm/pg-core'
+import { index, integer, serial, timestamp, varchar } from 'drizzle-orm/pg-core'
 import {
     columnId,
     columnIdXL,
@@ -11,8 +11,14 @@ import {
 
 export const users = createTable('user', {
     id: columnId,
+    username: varchar('username', { length: 256 }),
     name: varchar('name', { length: 256 }).notNull(),
-    githubId: varchar('github_id', { length: 256 }).unique(undefined, {
+    picture: varchar('picture', { length: 256 }),
+    email: varchar('email', { length: 256 }),
+    githubId: integer('github_id').unique(undefined, {
+        nulls: 'distinct',
+    }),
+    googleId: varchar('google_id', { length: 256 }).unique(undefined, {
         nulls: 'distinct',
     }),
     createdAt,

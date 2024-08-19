@@ -1,4 +1,4 @@
-import { GitHub } from 'arctic'
+import { GitHub, Google } from 'arctic'
 import { Lucia, TimeSpan } from 'lucia'
 import { env } from '~/env'
 import { db } from '../db'
@@ -41,6 +41,12 @@ export const github = new GitHub(
     env.GITHUB_CLIENT_ID,
     env.GITHUB_CLIENT_SECRET,
     {
-        redirectURI: env.GITHUB_REDIRECT_URI,
+        redirectURI: new URL('/login/github/callback', env.BASE_URL).href,
     },
+)
+
+export const google = new Google(
+    env.GOOGLE_CLIENT_ID,
+    env.GOOGLE_CLIENT_SECRET,
+    new URL('/login/google/callback', env.BASE_URL).href,
 )
