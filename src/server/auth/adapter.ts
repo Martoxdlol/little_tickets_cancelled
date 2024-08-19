@@ -1,6 +1,7 @@
 import { Database, schema } from '../db'
 import { eq } from 'drizzle-orm'
 import { Adapter, DatabaseSession, DatabaseUser, UserId } from 'lucia'
+import { LangKey } from '~/i18n/lib'
 
 export class LuciaAuthAdapter implements Adapter {
     database: Database
@@ -34,8 +35,11 @@ export class LuciaAuthAdapter implements Adapter {
             attributes: {
                 name: session.user.name,
                 githubId: session.user.githubId,
-                locale: session.user.locale,
+                locale: session.user.locale as LangKey,
                 onboardingCompleted: !!session.user.onboardingCompletedAt,
+                picture: session.user.picture,
+                email: session.user.email,
+                emailVerified: !!session.user.emailVerifiedAt,
             },
             id: session.user.id,
         }

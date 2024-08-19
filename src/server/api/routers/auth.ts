@@ -25,6 +25,7 @@ export const auth = createTRPCRouter({
             z.object({
                 name: z.string().min(1).max(255),
                 locale: z.enum(langs),
+                email: z.string().email().nullable(),
             }),
         )
         .mutation(async ({ ctx, input }) => {
@@ -34,6 +35,13 @@ export const auth = createTRPCRouter({
                     name: input.name,
                     locale: input.locale,
                     onboardingCompletedAt: new Date(),
+                    email: input.email,
+                    emailVerifiedAt:
+                        !!input.email &&
+                        input.email === ctx.session.user.email &&
+                        ctx.session.user.emailVerified
+                            ? undefined // keep the current value
+                            : null, // reset to unverified
                 })
                 .where(
                     and(

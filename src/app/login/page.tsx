@@ -35,7 +35,7 @@ function AuthLink({
         <Link
             {...props}
             href={{
-                pathname: '/login/github',
+                pathname: `/login/${props.provider}`,
                 query: {
                     redirectPath,
                 },

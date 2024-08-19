@@ -15,6 +15,7 @@ export const users = createTable('user', {
     name: varchar('name', { length: 256 }).notNull(),
     picture: varchar('picture', { length: 256 }),
     email: varchar('email', { length: 256 }),
+    emailVerifiedAt: date('email_verified_at'),
     githubId: integer('github_id').unique(undefined, {
         nulls: 'distinct',
     }),

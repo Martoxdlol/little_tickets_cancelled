@@ -43,12 +43,6 @@ export async function GET(request: Request): Promise<Response> {
         )
         const googleUser: GoogleUser = await googleUserResponse.json()
 
-        if (googleUser.email_verified === false) {
-            return new Response(null, {
-                status: 400,
-            })
-        }
-
         const [user] = await db
             .insert(schema.users)
             .values({
@@ -57,6 +51,7 @@ export async function GET(request: Request): Promise<Response> {
                 googleId: googleUser.sub,
                 picture: googleUser.picture,
                 email: googleUser.email,
+                emailVerifiedAt: googleUser.email_verified ? new Date() : null,
             })
             .onConflictDoUpdate({
                 target: [schema.users.googleId],

@@ -3,12 +3,15 @@ import { redirect } from 'next/navigation'
 import Appbar from '~/components/scaffolding/appbar'
 import PageContainer from '~/components/scaffolding/page-container'
 import { Scaffold } from '~/components/scaffolding/scaffold'
+import { useString } from '~/i18n/react'
 import { getServerAuthSession } from '~/server/auth/react'
 
 export default async function OnboardingPage(props: {
     searchParams: { redirect_path?: string }
 }) {
     const session = await getServerAuthSession()
+    const welcomeString = useString('welcome')
+    const titleString = useString('onboardingTitle')
 
     if (!session) {
         return redirect(
@@ -22,9 +25,15 @@ export default async function OnboardingPage(props: {
     }
 
     return (
-        <Scaffold appbar={<Appbar>Welcome {session.user.name}!</Appbar>}>
+        <Scaffold
+            appbar={
+                <Appbar>
+                    {welcomeString} {session.user.name}!
+                </Appbar>
+            }
+        >
             <PageContainer>
-                <p>Please complete onboarding</p>
+                <p>{titleString}</p>
                 <OnboardingFrom
                     user={session.user}
                     redirectPath={props.searchParams.redirect_path || '/'}

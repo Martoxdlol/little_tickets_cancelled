@@ -25,6 +25,9 @@ export const lucia = new Lucia(adapter, {
             name: attributes.name,
             locale: attributes.locale,
             onboardingCompleted: attributes.onboardingCompleted,
+            picture: attributes.picture,
+            email: attributes.email,
+            emailVerified: attributes.emailVerified,
         }
     },
 })
@@ -40,7 +43,10 @@ interface DatabaseUserAttributes {
     githubId: number | null
     name: string
     locale: LangKey
+    picture: string | null
     onboardingCompleted: boolean
+    email: string | null
+    emailVerified: boolean
 }
 
 export const github = new GitHub(

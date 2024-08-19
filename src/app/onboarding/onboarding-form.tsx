@@ -13,8 +13,9 @@ import { LangKey } from '~/i18n/lib'
 import { api } from '~/trpc/react'
 
 export function OnboardingFrom(props: { redirectPath: string; user: User }) {
-    const [name, setName] = useState('')
+    const [name, setName] = useState(props.user.name)
     const [lang, setLang] = useState<LangKey>(props.user.locale)
+    const [email, setEmail] = useState(props.user.email ?? '')
 
     const router = useRouter()
 
@@ -31,12 +32,13 @@ export function OnboardingFrom(props: { redirectPath: string; user: User }) {
         void completeOnboarding({
             locale: lang,
             name,
+            email: email || null,
         })
     }
 
     return (
         <form
-            className="flex flex-col gap-2 [&>div]:flex [&>div]:flex-col [&>div]:gap-0.5"
+            className="grid gap-2 [&>div]:flex [&>div]:flex-col [&>div]:gap-0.5 w-full max-w-[700px] grid-cols sm:grid-cols-2"
             onSubmit={handleSubmit}
         >
             <div>
@@ -60,15 +62,28 @@ export function OnboardingFrom(props: { redirectPath: string; user: User }) {
                     onValueChange={(value) => setLang(value as LangKey)}
                 />
             </div>
-            {!isPending && <Button type="submit">Continue</Button>}
-            {isPending && (
-                <IconButton
-                    disabled
-                    icon={<Loader2Icon className="animate-spin" />}
-                >
-                    Continue
-                </IconButton>
-            )}
+            <div className="col-span-2">
+                <Label htmlFor="name">E-mail address (optional)</Label>
+                <Input
+                    type="email"
+                    id="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    min={0}
+                    max={255}
+                />
+            </div>
+            <div className="col-span-2">
+                {!isPending && <Button type="submit">Continue</Button>}
+                {isPending && (
+                    <IconButton
+                        disabled
+                        icon={<Loader2Icon className="animate-spin" />}
+                    >
+                        Continue
+                    </IconButton>
+                )}
+            </div>
         </form>
     )
 }
