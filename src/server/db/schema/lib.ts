@@ -1,7 +1,12 @@
 // Example model schema from the Drizzle docs
 // https://orm.drizzle.team/docs/sql-schema-declaration
 import { sql } from 'drizzle-orm'
-import { pgTableCreator, timestamp, varchar } from 'drizzle-orm/pg-core'
+import {
+    integer,
+    pgTableCreator,
+    timestamp,
+    varchar,
+} from 'drizzle-orm/pg-core'
 import { customAlphabet } from 'nanoid'
 
 /**
@@ -36,6 +41,12 @@ export const columnId = varchar('id', { length: 22 })
 export const columnIdXL = varchar('id', { length: 64 })
     .primaryKey()
     .$defaultFn(() => createId(64))
+
+export const organizationId = varchar('organization_id', {
+    length: 22,
+}).notNull()
+
+export const version = integer('version').notNull().default(1)
 
 export function date(name: string) {
     return timestamp(name, {
