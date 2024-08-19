@@ -1,4 +1,5 @@
 'use client'
+
 import { useSession } from '~/components/auth/auth-provider'
 
 export default function Page() {

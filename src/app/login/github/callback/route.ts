@@ -1,5 +1,6 @@
 import { OAuth2RequestError } from 'arctic'
 import { cookies } from 'next/headers'
+
 import { github, lucia } from '~/server/auth'
 import { db, schema } from '~/server/db'
 

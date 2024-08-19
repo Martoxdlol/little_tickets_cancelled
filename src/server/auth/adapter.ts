@@ -1,5 +1,6 @@
 import { eq } from 'drizzle-orm'
 import { Adapter, DatabaseSession, DatabaseUser, UserId } from 'lucia'
+
 import { Database, schema } from '../db'
 
 export class LuciaAuthAdapter implements Adapter {

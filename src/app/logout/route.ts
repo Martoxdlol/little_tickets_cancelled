@@ -1,4 +1,5 @@
 import { cookies } from 'next/headers'
+
 import { lucia } from '~/server/auth'
 
 export async function GET(request: Request): Promise<Response> {

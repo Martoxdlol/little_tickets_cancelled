@@ -1,10 +1,11 @@
 import { relations, sql } from 'drizzle-orm'
 import { index, integer, serial, timestamp, varchar } from 'drizzle-orm/pg-core'
+
 import {
     columnId,
     columnIdXL,
-    createdAt,
     createTable,
+    createdAt,
     date,
     updatedAt,
 } from './lib'

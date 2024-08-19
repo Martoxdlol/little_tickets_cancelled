@@ -1,6 +1,7 @@
 import { GitHub, Google } from 'arctic'
 import { Lucia, TimeSpan } from 'lucia'
 import { env } from '~/env'
+
 import { db } from '../db'
 import { LuciaAuthAdapter } from './adapter'
 

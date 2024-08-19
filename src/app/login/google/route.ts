@@ -1,5 +1,6 @@
 import { generateCodeVerifier, generateState } from 'arctic'
 import { cookies } from 'next/headers'
+
 import { google } from '~/server/auth'
 
 export async function GET(request: Request): Promise<Response> {
