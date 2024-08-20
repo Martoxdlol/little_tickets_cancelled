@@ -2,6 +2,7 @@ import { users } from './auth'
 import { createTable, organizationId } from './lib'
 import { organizations } from './organizations'
 import { channels } from './tickets'
+import { relations } from 'drizzle-orm'
 import { boolean, index, text, varchar } from 'drizzle-orm/pg-core'
 
 const organizationMembersRoles = ['owner', 'admin', 'member'] as const
@@ -20,6 +21,16 @@ export const organizationMembers = createTable(
     (t) => ({
         userIdIndex: index().on(t.userId),
         organizationIdIndex: index().on(t.organizationId),
+    }),
+)
+
+export const organizationMembersRelations = relations(
+    organizationMembers,
+    ({ one }) => ({
+        organization: one(organizations, {
+            fields: [organizationMembers.organizationId],
+            references: [organizations.id],
+        }),
     }),
 )
 

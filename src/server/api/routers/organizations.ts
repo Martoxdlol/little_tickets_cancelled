@@ -1,3 +1,4 @@
+import { eq } from 'drizzle-orm'
 import { z } from 'zod'
 import { slugSchema } from '~/lib/schemas'
 import { createTRPCRouter, protectedProcedure } from '~/server/api/trpc'
@@ -20,14 +21,21 @@ export const organizations = createTRPCRouter({
                         slug: input.slug,
                     })
                     .returning()
-                const member = await tx
-                    .insert(schema.organizationMembers)
-                    .values({
-                        organizationId: org!.id,
-                        role: 'owner',
-                        userId: ctx.session.userId,
-                    })
+                await tx.insert(schema.organizationMembers).values({
+                    organizationId: org!.id,
+                    role: 'owner',
+                    userId: ctx.session.userId,
+                })
                 return org!
             })
         }),
+
+    listMemberships: protectedProcedure.query(async ({ ctx }) => {
+        return await ctx.db.query.organizationMembers.findMany({
+            where: eq(schema.organizationMembers.userId, ctx.session.user.id),
+            with: {
+                organization: true,
+            },
+        })
+    }),
 })
