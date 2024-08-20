@@ -10,6 +10,7 @@ import { getServerAuthSession } from '../auth/react'
 import { TRPCError, initTRPC } from '@trpc/server'
 import superjson from 'superjson'
 import { ZodError } from 'zod'
+import { createAppStrings } from '~/i18n/strings'
 import { db } from '~/server/db'
 
 /**
@@ -118,9 +119,12 @@ export const protectedProcedure = t.procedure
             })
         }
 
+        const strings = createAppStrings(session.user.locale)
+
         return next({
             ctx: {
                 ...ctx,
+                strings,
                 session,
             },
         })

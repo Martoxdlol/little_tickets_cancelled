@@ -38,7 +38,7 @@ export const sessions = createTable(
         expiresAt: date('expires_at').notNull(),
     },
     (t) => ({
-        userIdIndex: index('user_id_index').on(t.userId),
+        userIdIndex: index().on(t.userId),
     }),
 )
 
@@ -59,6 +59,6 @@ export const posts = createTable(
         ),
     },
     (example) => ({
-        nameIndex: index('name_idx').on(example.name),
+        nameIndex: index().on(example.name),
     }),
 )

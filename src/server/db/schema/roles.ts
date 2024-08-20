@@ -1,8 +1,8 @@
-import { boolean, index, text, varchar } from 'drizzle-orm/pg-core'
 import { users } from './auth'
 import { createTable, organizationId } from './lib'
 import { organizations } from './organizations'
 import { channels } from './tickets'
+import { boolean, index, text, varchar } from 'drizzle-orm/pg-core'
 
 const organizationMembersRoles = ['owner', 'admin', 'member'] as const
 
@@ -18,10 +18,8 @@ export const organizationMembers = createTable(
         organizationId: organizationId.references(() => organizations.id),
     },
     (t) => ({
-        userIdIndex: index('user_id_index').on(t.userId),
-        organizationIdIndex: index('organization_id_index').on(
-            t.organizationId,
-        ),
+        userIdIndex: index().on(t.userId),
+        organizationIdIndex: index().on(t.organizationId),
     }),
 )
 
@@ -46,10 +44,8 @@ export const channelMembers = createTable(
         organizationId: organizationId.references(() => organizations.id),
     },
     (t) => ({
-        userIdIndex: index('user_id_index').on(t.userId),
-        organizationIdIndex: index('organization_id_index').on(
-            t.organizationId,
-        ),
+        userIdIndex: index().on(t.userId),
+        organizationIdIndex: index().on(t.organizationId),
     }),
 )
 
@@ -61,9 +57,7 @@ export const organizationMemberInvitations = createTable(
         organizationId: organizationId.references(() => organizations.id),
     },
     (t) => ({
-        emailIndex: index('email_index').on(t.email),
-        organizationIdIndex: index('organization_id_index').on(
-            t.organizationId,
-        ),
+        emailIndex: index().on(t.email),
+        organizationIdIndex: index().on(t.organizationId),
     }),
 )

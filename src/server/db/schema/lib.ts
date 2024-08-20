@@ -15,7 +15,7 @@ import { customAlphabet } from 'nanoid'
  *
  * @see https://orm.drizzle.team/docs/goodies#multi-project-schema
  */
-export const createTable = pgTableCreator((name) => `little_tickets_${name}`)
+export const createTable = pgTableCreator((name) => `lt_${name}`)
 
 export const updatedAt = timestamp('updated_at', {
     withTimezone: true,

@@ -1,4 +1,3 @@
-import { boolean, index, varchar } from 'drizzle-orm/pg-core'
 import { users } from './auth'
 import {
     columnId,
@@ -9,6 +8,7 @@ import {
     version,
 } from './lib'
 import { organizations } from './organizations'
+import { boolean, index, varchar } from 'drizzle-orm/pg-core'
 
 export const updateTypes = [
     'comment',
@@ -71,9 +71,7 @@ export const tickets = createTable(
         updatedAt,
     },
     (t) => ({
-        organizationIdIndex: index('organization_id_index').on(
-            t.organizationId,
-        ),
+        organizationIdIndex: index().on(t.organizationId),
     }),
 )
 
@@ -112,10 +110,8 @@ export const ticketUpdates = createTable(
         createdAt,
     },
     (t) => ({
-        organizationIdIndex: index('organization_id_index').on(
-            t.organizationId,
-        ),
-        ticketIdIndex: index('ticket_id_index').on(t.ticketId),
+        organizationIdIndex: index().on(t.organizationId),
+        ticketIdIndex: index().on(t.ticketId),
     }),
 )
 
@@ -130,9 +126,7 @@ export const channels = createTable(
         organizationId: organizationId.references(() => organizations.id),
     },
     (t) => ({
-        organizationIdIndex: index('organization_id_index').on(
-            t.organizationId,
-        ),
+        organizationIdIndex: index().on(t.organizationId),
     }),
 )
 
@@ -151,10 +145,8 @@ export const categories = createTable(
         organizationId: organizationId.references(() => organizations.id),
     },
     (t) => ({
-        organizationIdIndex: index('organization_id_index').on(
-            t.organizationId,
-        ),
-        channelIdIndex: index('channel_id_index').on(t.channelId),
+        organizationIdIndex: index().on(t.organizationId),
+        channelIdIndex: index().on(t.channelId),
     }),
 )
 
@@ -177,10 +169,8 @@ export const subcategories = createTable(
         organizationId: organizationId.references(() => organizations.id),
     },
     (t) => ({
-        organizationIdIndex: index('organization_id_index').on(
-            t.organizationId,
-        ),
-        categoryIdIndex: index('category_id_index').on(t.categoryId),
-        channelIdIndex: index('channel_id_index').on(t.channelId),
+        organizationIdIndex: index().on(t.organizationId),
+        categoryIdIndex: index().on(t.categoryId),
+        channelIdIndex: index().on(t.channelId),
     }),
 )

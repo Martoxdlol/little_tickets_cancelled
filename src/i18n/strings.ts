@@ -34,6 +34,18 @@ export function createAppStrings(lang: LangKey) {
             en: 'No pending invitations',
             es: 'No hay invitaciones pendientes',
         }),
+        slugErrorMessage: new I18NString({
+            en: 'Must be between 4 and 56 characters, and only contain letters, numbers, and dashes',
+            es: 'Debe tener entre 4 y 56 caracteres, y solo contener letras, números y guiones',
+        }),
+        nameErrorMessage: new I18NString({
+            en: 'Must be between 1 and 255 characters',
+            es: 'Debe tener entre 1 y 255 caracteres',
+        }),
+        genericErrorMessage: new I18NString({
+            en: 'An error occurred',
+            es: 'Ocurrió un error',
+        }),
     })
 }
 

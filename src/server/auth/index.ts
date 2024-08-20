@@ -9,7 +9,7 @@ import { LangKey } from '~/i18n/lib'
 const adapter = new LuciaAuthAdapter(db)
 
 export const lucia = new Lucia(adapter, {
-    sessionExpiresIn: new TimeSpan(12, 'm'),
+    sessionExpiresIn: new TimeSpan(72, 'w'),
     sessionCookie: {
         // this sets cookies with super long expiration
         // since Next.js doesn't allow Lucia to extend cookie expiration when rendering pages

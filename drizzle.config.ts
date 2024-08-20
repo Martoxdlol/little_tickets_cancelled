@@ -7,5 +7,5 @@ export default {
     dbCredentials: {
         url: env.DATABASE_URL,
     },
-    tablesFilter: ['little_tickets_*'],
+    tablesFilter: ['lt_*'],
 } satisfies Config
