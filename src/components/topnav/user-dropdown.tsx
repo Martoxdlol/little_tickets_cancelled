@@ -2,13 +2,20 @@
 
 import { useSession } from '../auth/auth-provider'
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
-import { LogOut } from 'lucide-react'
+import { LogOut, MoonIcon, SunIcon } from 'lucide-react'
+import { useTheme } from 'next-themes'
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuLabel,
+    DropdownMenuPortal,
+    DropdownMenuRadioGroup,
+    DropdownMenuRadioItem,
     DropdownMenuSeparator,
+    DropdownMenuSub,
+    DropdownMenuSubContent,
+    DropdownMenuSubTrigger,
     DropdownMenuTrigger,
 } from '~/components/ui/dropdown-menu'
 import { useString } from '~/i18n/react'
@@ -36,6 +43,7 @@ export function UserAvatar() {
 export function UserDropDown(props: { children: React.ReactNode }) {
     const myAccountString = useString('myAccount')
     const logoutString = useString('logout')
+    const { setTheme, theme } = useTheme()
 
     return (
         <DropdownMenu>
@@ -114,6 +122,41 @@ export function UserDropDown(props: { children: React.ReactNode }) {
                     <span>API</span>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator /> */}
+                <DropdownMenuSub>
+                    <DropdownMenuSubTrigger>
+                        <MoonIcon className="dark:block hidden mr-2 h-4 w-4" />
+                        <SunIcon className="dark:hidden mr-2 h-4 w-4" />
+                        <span>Theme</span>
+                    </DropdownMenuSubTrigger>
+                    <DropdownMenuPortal>
+                        <DropdownMenuSubContent>
+                            <DropdownMenuRadioGroup
+                                value={theme}
+                                onValueChange={setTheme}
+                            >
+                                <DropdownMenuRadioItem
+                                    value="light"
+                                    className="flex items-center gap-2"
+                                >
+                                    Light
+                                </DropdownMenuRadioItem>
+                                <DropdownMenuRadioItem
+                                    value="dark"
+                                    className="flex items-center gap-2"
+                                >
+                                    Dark
+                                </DropdownMenuRadioItem>
+                                <DropdownMenuRadioItem
+                                    value="system"
+                                    className="flex items-center gap-2"
+                                >
+                                    System
+                                </DropdownMenuRadioItem>
+                            </DropdownMenuRadioGroup>
+                        </DropdownMenuSubContent>
+                    </DropdownMenuPortal>
+                </DropdownMenuSub>
+                <DropdownMenuSeparator />
                 <DropdownMenuItem
                     onClick={() => (window.location.href = '/logout')}
                 >

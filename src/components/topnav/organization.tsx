@@ -2,7 +2,7 @@
 
 import { NewTicketModal } from '../new-ticket-dialog'
 import Appbar from '../scaffolding/appbar'
-import { IconButton } from '../ui/custom/icon-button'
+import { SmallIconButton } from '../ui/custom/icon-button'
 import { UserAvatar } from './user-dropdown'
 import { SquarePenIcon } from 'lucide-react'
 import { useString } from '~/i18n/react'
@@ -13,9 +13,9 @@ export function Topnav() {
     return (
         <Appbar>
             <NewTicketModal>
-                <IconButton icon={<SquarePenIcon />} variant="outline">
+                <SmallIconButton icon={<SquarePenIcon />} variant="outline">
                     {newTicketString}
-                </IconButton>
+                </SmallIconButton>
             </NewTicketModal>
             <div className="flex-grow" />
             <UserAvatar />

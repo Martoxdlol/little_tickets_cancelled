@@ -5,6 +5,7 @@ import { Session, User } from 'lucia'
 import Appbar from '~/components/scaffolding/appbar'
 import PageContainer from '~/components/scaffolding/page-container'
 import { Scaffold } from '~/components/scaffolding/scaffold'
+import { Screen } from '~/components/scaffolding/screen'
 import { useString } from '~/i18n/react'
 
 export default function OnboardingPage(props: {
@@ -16,20 +17,22 @@ export default function OnboardingPage(props: {
     const session = props.session
 
     return (
-        <Scaffold
-            appbar={
-                <Appbar>
-                    {welcomeString} {session.user.name}!
-                </Appbar>
-            }
-        >
-            <PageContainer>
-                <p>{titleString}</p>
-                <OnboardingFrom
-                    user={session.user}
-                    redirectPath={props.redirectPath}
-                />
-            </PageContainer>
-        </Scaffold>
+        <Screen>
+            <Scaffold
+                appbar={
+                    <Appbar>
+                        {welcomeString} {session.user.name}!
+                    </Appbar>
+                }
+            >
+                <PageContainer>
+                    <p>{titleString}</p>
+                    <OnboardingFrom
+                        user={session.user}
+                        redirectPath={props.redirectPath}
+                    />
+                </PageContainer>
+            </Scaffold>
+        </Screen>
     )
 }
