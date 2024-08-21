@@ -1,5 +1,5 @@
 import { HomeIcon, SquarePenIcon } from 'lucide-react'
-import { Suspense } from 'react'
+import { type ReactNode, Suspense } from 'react'
 import { ChannelsMenuItems } from '~/components/channels/channels-menu-items'
 import { Menu, MenuItem } from '~/components/menu'
 import { NewTicketModal } from '~/components/new-ticket-dialog'
@@ -13,7 +13,8 @@ import { Topnav } from '~/components/topnav/organization'
 import { SmallIconButton } from '~/components/ui/custom/icon-button'
 
 export default function HomeLayout(props: {
-    children: React.ReactNode
+    children: ReactNode
+    menu: ReactNode
     params: { organization: string }
 }) {
     return (
@@ -25,7 +26,7 @@ export default function HomeLayout(props: {
                 appbarFit="above-children"
                 leftSide={
                     <DesktopSideNav>
-                        <div className="mb-2 flex items-center gap-2">
+                        <div className="sticky top-0 z-10 mb-2 flex items-center gap-2 bg-background">
                             <div className="flex-grow">
                                 <OrganizationSwitcher />
                             </div>
@@ -44,6 +45,7 @@ export default function HomeLayout(props: {
                             >
                                 Home
                             </MenuItem>
+                            {props.menu}
                             <ChannelsMenuItems
                                 orgSlug={props.params.organization}
                             />
@@ -52,7 +54,7 @@ export default function HomeLayout(props: {
                 }
                 appbar={<Topnav />}
             >
-                <PageContainer className="md:bg-content border-t md:rounded-tl-md md:border-l">
+                <PageContainer className="border-t bg-content md:rounded-tl-md md:border-l">
                     <Suspense fallback="loading...">{props.children}</Suspense>
                 </PageContainer>
             </Scaffold>

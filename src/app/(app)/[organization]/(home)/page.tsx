@@ -1,5 +1,6 @@
-import OrgHomePageContent from './page-content'
+import PageLayout from '~/components/scaffolding/page-layout'
 import { api, HydrateClient } from '~/trpc/server'
+import OrgHomePageContent from './page-content'
 
 export default async function Page(props: {
     params: { organization: string }
@@ -10,7 +11,9 @@ export default async function Page(props: {
 
     return (
         <HydrateClient>
-            <OrgHomePageContent organization={props.params.organization} />
+            <PageLayout>
+                <OrgHomePageContent organization={props.params.organization} />
+            </PageLayout>
         </HydrateClient>
     )
 }

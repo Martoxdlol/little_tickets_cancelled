@@ -6,13 +6,13 @@
  * TL;DR - This is where all the tRPC server stuff is created and plugged in. The pieces you will
  * need to use are documented accordingly near the end.
  */
-import { getServerAuthSession } from '../auth/react'
-import { getOrganizationBySlug } from '../lib'
 import { initTRPC, TRPCError } from '@trpc/server'
 import superjson from 'superjson'
 import { z, ZodError } from 'zod'
 import { createAppStrings } from '~/i18n/strings'
 import { db } from '~/server/db'
+import { getServerAuthSession } from '../auth/react'
+import { getOrganizationBySlug } from '../lib'
 
 /**
  * 1. CONTEXT

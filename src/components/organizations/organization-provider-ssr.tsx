@@ -1,6 +1,6 @@
-import { OrganizationProvider } from './organization-provider'
 import { Suspense } from 'react'
 import { api } from '~/trpc/server'
+import { OrganizationProvider } from './organization-provider'
 
 export function OrganizationProviderSSR(props: {
     children: React.ReactNode
@@ -30,6 +30,7 @@ async function OrganizationProviderInner(props: {
 
     return (
         <OrganizationProvider organization={org}>
+            <title>{org.name}</title>
             {props.children}
         </OrganizationProvider>
     )

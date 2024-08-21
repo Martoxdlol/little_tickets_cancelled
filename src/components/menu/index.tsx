@@ -1,24 +1,29 @@
 'use client'
 
-import { Skeleton } from '../ui/skeleton'
 import Link from 'next/link'
-import { type ReactElement } from 'react'
+import { forwardRef, type MouseEventHandler, type ReactElement } from 'react'
 import { cn } from '~/lib/utils'
+import { Skeleton } from '../ui/skeleton'
 
 export function Menu(props: { children: React.ReactNode; className?: string }) {
     return (
-        <ul className={cn('flex flex-col p-1 w-full', props.className)}>
+        <ul className={cn('flex w-full flex-col gap-0.5 p-1', props.className)}>
             {props.children}
         </ul>
     )
 }
 
-export function MenuItem(props: {
-    children: React.ReactNode
-    icon?: ReactElement
-    href?: string
-    onClick?: () => void
-}) {
+export const MenuItem = forwardRef<
+    HTMLLIElement,
+    {
+        children: React.ReactNode
+        icon?: ReactElement
+        href?: string
+        onClick?:
+            | MouseEventHandler<HTMLAnchorElement | HTMLButtonElement>
+            | undefined
+    }
+>((props, ref) => {
     const buttonClassName =
         'flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none hover:bg-accent focus:bg-accent focus:text-accent-foreground pl-8 w-full'
 
@@ -36,23 +41,29 @@ export function MenuItem(props: {
     const content = props.href ? (
         <Link
             href={props.href}
-            onClick={() => props.onClick?.()}
+            onClick={props.onClick}
             className={buttonClassName}
         >
             {children}
         </Link>
     ) : (
-        <button className={buttonClassName} onClick={() => props.onClick?.()}>
+        <button className={buttonClassName} onClick={props.onClick}>
             {children}
         </button>
     )
 
-    return <li className="relative h-8">{content}</li>
-}
+    return (
+        <li ref={ref} className="relative h-8">
+            {content}
+        </li>
+    )
+})
+
+MenuItem.displayName = 'MenuItem'
 
 export function MenuSectionTitle(props: { children: React.ReactNode }) {
     return (
-        <p className="text-xs opacity-secondary pt-2 pb-0.5 px-[9px]">
+        <p className="px-[9px] pb-0.5 pt-2 text-xs opacity-secondary">
             {props.children}
         </p>
     )
@@ -61,7 +72,7 @@ export function MenuSectionTitle(props: { children: React.ReactNode }) {
 export function MenuItemSkeleton() {
     return (
         <MenuItem>
-            <Skeleton className="-ml-6 w-full h-4" />
+            <Skeleton className="-ml-6 h-4 w-full" />
         </MenuItem>
     )
 }

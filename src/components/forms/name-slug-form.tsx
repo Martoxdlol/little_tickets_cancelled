@@ -1,15 +1,15 @@
 'use client'
 
-import { TextFormField } from '../form-fields/text'
-import { Button } from '../ui/button'
-import { IconButton } from '../ui/custom/icon-button'
 import { useForm } from '@tanstack/react-form'
 import { TRPCClientError } from '@trpc/client'
 import { Loader2Icon } from 'lucide-react'
 import { useState } from 'react'
-import { z } from 'zod'
+import { z, type ZodSchema } from 'zod'
 import { useString } from '~/i18n/react'
 import { nameToSlug, slugSchema } from '~/lib/schemas'
+import { TextFormField } from '../form-fields/text'
+import { Button } from '../ui/button'
+import { IconButton } from '../ui/custom/icon-button'
 
 export function NameSlugForm(props: {
     namePlaceholder?: string
@@ -21,10 +21,18 @@ export function NameSlugForm(props: {
     isLoading?: boolean
     defaultName?: string
     defaultSlug?: string
+    slugSchema?: ZodSchema
 }) {
     const [error, setError] = useState<string | undefined>(undefined)
 
     const genericErrorString = useString('slugErrorMessage')
+
+    const [loading, setLoading] = useState(false)
+
+    let isLoading = props.isLoading
+    if (isLoading === undefined) {
+        isLoading = loading
+    }
 
     const form = useForm({
         defaultValues: {
@@ -32,6 +40,7 @@ export function NameSlugForm(props: {
             slug: props.defaultSlug ?? '',
         },
         onSubmit: async ({ value }) => {
+            setLoading(true)
             try {
                 let slug = value.slug
                 if (!slug) {
@@ -59,19 +68,26 @@ export function NameSlugForm(props: {
                     setError(genericErrorString)
                 }
             }
+            setLoading(false)
         },
     })
 
     const slugField = form.useField({ name: 'name' })
-    let defaultSlug =
-        nameToSlug(slugField.state.value) ||
-        nameToSlug(props.namePlaceholder ?? '')
-    if (defaultSlug.length < 4) {
+    let defaultSlug = nameToSlug(slugField.state.value)
+
+    if (defaultSlug.length < 4 && slugField.state.value.trim().length > 0) {
         defaultSlug += props.shortSlugSuffix ?? ''
     }
 
     const slugErrorString = useString('slugErrorMessage')
     const nameErrorString = useString('nameErrorMessage')
+
+    let optionalSlugSchema: ZodSchema = props.slugSchema ?? slugSchema
+    if (defaultSlug.length > 0) {
+        optionalSlugSchema = slugSchema.or(z.literal(''))
+    }
+
+    console.log(defaultSlug)
 
     return (
         <form
@@ -95,14 +111,16 @@ export function NameSlugForm(props: {
                 form={form}
                 name="slug"
                 label="Identifier"
-                validator={slugSchema.or(z.literal(''))}
-                placeholder={defaultSlug}
+                validator={optionalSlugSchema}
+                placeholder={
+                    defaultSlug || nameToSlug(props.namePlaceholder ?? '')
+                }
                 transform={(v) => nameToSlug(v)}
                 errorMessage={slugErrorString}
                 validateOnChange
             />
-            {!props.isLoading && <Button type="submit">Continue</Button>}
-            {props.isLoading && (
+            {!isLoading && <Button type="submit">Continue</Button>}
+            {isLoading && (
                 <IconButton
                     icon={<Loader2Icon className="animate-spin" />}
                     disabled

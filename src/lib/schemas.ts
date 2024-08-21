@@ -6,6 +6,12 @@ export const slugSchema = z
     .min(4)
     .max(56)
 
+export const smallSlugSchema = z
+    .string()
+    .regex(/^[a-z0-9]+(-[a-z0-9]+)*$/)
+    .min(1)
+    .max(56)
+
 export function nameToSlug(name: string) {
     // 1. lowercase
     // 2. Replace spaces with hyphens (-)

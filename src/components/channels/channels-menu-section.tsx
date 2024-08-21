@@ -1,16 +1,22 @@
 'use client'
 
-import { CircleDashedIcon, PlusIcon } from 'lucide-react'
+import { CircleDashedIcon, CircleDotDashedIcon, PlusIcon } from 'lucide-react'
+import { usePathname } from 'next/navigation'
 import { useString } from '~/i18n/react'
 import { type RouterOutputs } from '~/trpc/react'
 import { MenuItem, MenuItemSkeleton, MenuSectionTitle } from '../menu'
 import { useOrganization } from '../organizations/organization-provider'
+import { NewModalDialog } from './new-channel-modal'
 
 export function ChannelsMenuSection(props: {
     channels: RouterOutputs['channels']['list']
 }) {
     const org = useOrganization()
     const title = useString('channels')
+
+    const path = usePathname()
+
+    const [, channelSlug] = path.split('/').filter(Boolean)
 
     return (
         <>
@@ -19,7 +25,13 @@ export function ChannelsMenuSection(props: {
                 <MenuItem
                     key={item.id}
                     href={`/${org.slug}/${item.slug}`}
-                    icon={<CircleDashedIcon />}
+                    icon={
+                        channelSlug === item.slug ? (
+                            <CircleDotDashedIcon />
+                        ) : (
+                            <CircleDashedIcon />
+                        )
+                    }
                 >
                     {item.name}
                 </MenuItem>
@@ -37,7 +49,11 @@ export function AutoAddChannelMenuItem() {
         return null
     }
 
-    return <MenuItem icon={<PlusIcon />}>{title}</MenuItem>
+    return (
+        <NewModalDialog>
+            <MenuItem icon={<PlusIcon />}>{title}</MenuItem>
+        </NewModalDialog>
+    )
 }
 
 export function ChannelMenuItemSkeleton() {
