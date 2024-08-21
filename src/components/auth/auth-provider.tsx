@@ -1,6 +1,6 @@
 'use client'
 
-import { Session, User } from 'lucia'
+import { type Session, type User } from 'lucia'
 import { redirect, usePathname, useSearchParams } from 'next/navigation'
 import { createContext, useContext } from 'react'
 

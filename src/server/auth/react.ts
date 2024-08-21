@@ -1,8 +1,7 @@
+import { lucia } from '.'
 import type { Session, User } from 'lucia'
 import { cookies } from 'next/headers'
 import { cache } from 'react'
-
-import { lucia } from '.'
 
 export const validateRequest = cache(
     async (): Promise<
@@ -19,7 +18,7 @@ export const validateRequest = cache(
         const result = await lucia.validateSession(sessionId)
         // next.js throws when you attempt to set cookie when rendering page
         try {
-            if (result.session && result.session.fresh) {
+            if (result.session?.fresh) {
                 const sessionCookie = lucia.createSessionCookie(
                     result.session.id,
                 )

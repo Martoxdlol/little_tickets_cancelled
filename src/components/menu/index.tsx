@@ -1,7 +1,8 @@
 'use client'
 
+import { Skeleton } from '../ui/skeleton'
 import Link from 'next/link'
-import { ReactElement } from 'react'
+import { type ReactElement } from 'react'
 import { cn } from '~/lib/utils'
 
 export function Menu(props: { children: React.ReactNode; className?: string }) {
@@ -38,7 +39,7 @@ export function MenuItem(props: {
             onClick={() => props.onClick?.()}
             className={buttonClassName}
         >
-            <a className={buttonClassName}>{children}</a>
+            {children}
         </Link>
     ) : (
         <button className={buttonClassName} onClick={() => props.onClick?.()}>
@@ -54,5 +55,13 @@ export function MenuSectionTitle(props: { children: React.ReactNode }) {
         <p className="text-xs opacity-secondary pt-2 pb-0.5 px-[9px]">
             {props.children}
         </p>
+    )
+}
+
+export function MenuItemSkeleton() {
+    return (
+        <MenuItem>
+            <Skeleton className="-ml-6 w-full h-4" />
+        </MenuItem>
     )
 }

@@ -1,5 +1,5 @@
 import { AuthProvider } from './auth-provider'
-import { ReactNode } from 'react'
+import { type ReactNode } from 'react'
 import { getServerAuthSession } from '~/server/auth/react'
 
 export async function AuthProviderSSR(props: { children: ReactNode }) {

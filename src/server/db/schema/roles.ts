@@ -1,5 +1,5 @@
 import { users } from './auth'
-import { createTable, organizationId } from './lib'
+import { columnId, createTable, organizationId } from './lib'
 import { organizations } from './organizations'
 import { channels } from './tickets'
 import { relations } from 'drizzle-orm'
@@ -10,6 +10,7 @@ const organizationMembersRoles = ['owner', 'admin', 'member'] as const
 export const organizationMembers = createTable(
     'organization_member',
     {
+        id: columnId,
         userId: varchar('user_id', { length: 22 })
             .notNull()
             .references(() => users.id),
@@ -37,6 +38,7 @@ export const organizationMembersRelations = relations(
 export const channelMembers = createTable(
     'channel_member',
     {
+        id: columnId,
         userId: varchar('user_id', { length: 22 })
             .notNull()
             .references(() => users.id),
@@ -60,9 +62,25 @@ export const channelMembers = createTable(
     }),
 )
 
+export const channelMembersRelations = relations(channelMembers, ({ one }) => ({
+    user: one(users, {
+        fields: [channelMembers.userId],
+        references: [users.id],
+    }),
+    channel: one(channels, {
+        fields: [channelMembers.channelId],
+        references: [channels.id],
+    }),
+    organization: one(organizations, {
+        fields: [channelMembers.organizationId],
+        references: [organizations.id],
+    }),
+}))
+
 export const organizationMemberInvitations = createTable(
     'organization_member_invitation',
     {
+        id: columnId,
         email: varchar('email', { length: 256 }).notNull(),
         role: text('role', { enum: organizationMembersRoles }).notNull(),
         organizationId: organizationId.references(() => organizations.id),

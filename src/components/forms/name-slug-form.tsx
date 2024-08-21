@@ -79,7 +79,7 @@ export function NameSlugForm(props: {
             onSubmit={(e) => {
                 e.preventDefault()
                 e.stopPropagation()
-                form.handleSubmit()
+                void form.handleSubmit()
             }}
         >
             {error && <p className="text-red-500">{error}</p>}

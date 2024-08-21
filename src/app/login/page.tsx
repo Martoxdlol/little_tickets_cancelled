@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { ComponentProps } from 'react'
+import { type ComponentProps } from 'react'
 import { Scaffold } from '~/components/scaffolding/scaffold'
 import { cn } from '~/lib/utils'
 

@@ -1,6 +1,6 @@
 'use client'
 
-import { User } from 'lucia'
+import { type User } from 'lucia'
 import { Loader2Icon } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
@@ -9,7 +9,7 @@ import { Combobox } from '~/components/ui/custom/combobox'
 import { IconButton } from '~/components/ui/custom/icon-button'
 import { Input } from '~/components/ui/input'
 import { Label } from '~/components/ui/label'
-import { LangKey } from '~/i18n/lib'
+import { type LangKey } from '~/i18n/lib'
 import { api } from '~/trpc/react'
 
 export function OnboardingFrom(props: { redirectPath: string; user: User }) {

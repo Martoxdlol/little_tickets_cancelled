@@ -1,7 +1,7 @@
 import * as schema from './schema'
-import { ExtractTablesWithRelations } from 'drizzle-orm'
-import { PgTransaction } from 'drizzle-orm/pg-core'
-import { PostgresJsQueryResultHKT, drizzle } from 'drizzle-orm/postgres-js'
+import { type ExtractTablesWithRelations } from 'drizzle-orm'
+import { type PgTransaction } from 'drizzle-orm/pg-core'
+import { type PostgresJsQueryResultHKT, drizzle } from 'drizzle-orm/postgres-js'
 import postgres from 'postgres'
 import { env } from '~/env'
 

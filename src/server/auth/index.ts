@@ -1,10 +1,10 @@
-import { db } from '../db'
-import { LuciaAuthAdapter } from './adapter'
 import { GitHub, Google } from 'arctic'
 import { Lucia, TimeSpan } from 'lucia'
 import { cookies, headers } from 'next/headers'
 import { env } from '~/env'
-import { LangKey } from '~/i18n/lib'
+import { type LangKey } from '~/i18n/lib'
+import { db } from '../db'
+import { LuciaAuthAdapter } from './adapter'
 
 const adapter = new LuciaAuthAdapter(db)
 

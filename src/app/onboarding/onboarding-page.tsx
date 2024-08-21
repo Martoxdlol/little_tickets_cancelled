@@ -1,7 +1,7 @@
 'use client'
 
 import { OnboardingFrom } from './onboarding-form'
-import { Session, User } from 'lucia'
+import { type Session, type User } from 'lucia'
 import Appbar from '~/components/scaffolding/appbar'
 import PageContainer from '~/components/scaffolding/page-container'
 import { Scaffold } from '~/components/scaffolding/scaffold'

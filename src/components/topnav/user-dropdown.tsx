@@ -25,7 +25,7 @@ export function UserAvatar() {
 
     return (
         <UserDropDown>
-            <Avatar>
+            <Avatar className="size-7">
                 {session.user.picture && (
                     <AvatarImage
                         src={session.user.picture}

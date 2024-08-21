@@ -1,4 +1,4 @@
-import { ReactNode } from 'react'
+import { type ReactNode } from 'react'
 import { AuthProviderSSR } from '~/components/auth/auth-provider-ssr'
 import { Screen } from '~/components/scaffolding/screen'
 import { ThemeProvider } from '~/components/theme/theme-provider'

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
 
 import { Input } from '../ui/input'
@@ -6,6 +7,8 @@ import type { FieldApi, useForm } from '@tanstack/react-form'
 import { zodValidator } from '@tanstack/zod-form-adapter'
 import type { ReactNode } from 'react'
 import type { ZodType } from 'zod'
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 export function TextFormField(props: {
     name: string
@@ -56,7 +59,6 @@ export function TextFormField(props: {
     )
 }
 
-// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 function FieldInfo({
     field,
     errorMessage,

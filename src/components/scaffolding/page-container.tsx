@@ -7,7 +7,7 @@ export default function PageContainer({
     ...props
 }: ComponentProps<'div'> & { twoColumn?: boolean; centered?: boolean }) {
     return (
-        <div
+        <main
             {...props}
             className={cn(
                 'h-full overflow-y-auto p-4 sm:p-6 gap-4',

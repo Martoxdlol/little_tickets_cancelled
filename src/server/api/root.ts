@@ -1,4 +1,5 @@
 import { auth } from './routers/auth'
+import { channels } from './routers/channels'
 import { organizations } from './routers/organizations'
 import { postRouter } from '~/server/api/routers/post'
 import { createCallerFactory, createTRPCRouter } from '~/server/api/trpc'
@@ -12,6 +13,7 @@ export const appRouter = createTRPCRouter({
     post: postRouter,
     auth,
     organizations,
+    channels,
 })
 
 // export type definition of API

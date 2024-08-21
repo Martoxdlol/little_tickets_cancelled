@@ -1,7 +1,12 @@
-import { Database, schema } from '../db'
+import { type Database, schema } from '../db'
 import { eq } from 'drizzle-orm'
-import { Adapter, DatabaseSession, DatabaseUser, UserId } from 'lucia'
-import { LangKey } from '~/i18n/lib'
+import {
+    type Adapter,
+    type DatabaseSession,
+    type DatabaseUser,
+    type UserId,
+} from 'lucia'
+import { type LangKey } from '~/i18n/lib'
 
 export class LuciaAuthAdapter implements Adapter {
     database: Database

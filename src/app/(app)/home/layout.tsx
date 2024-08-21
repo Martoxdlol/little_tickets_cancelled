@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation'
-import { ReactNode } from 'react'
+import { type ReactNode } from 'react'
 import { api } from '~/trpc/server'
 
 export default async function Layout(props: { children: ReactNode }) {

@@ -46,6 +46,14 @@ export function createAppStrings(lang: LangKey) {
             en: 'An error occurred',
             es: 'Ocurrió un error',
         }),
+        channels: new I18NString({
+            en: 'Channels',
+            es: 'Canales',
+        }),
+        createChannel: new I18NString({
+            en: 'Create channel',
+            es: 'Crear canal',
+        }),
     })
 }
 

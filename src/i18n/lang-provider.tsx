@@ -1,7 +1,7 @@
 'use client'
 
 import { type LangKey, validateLocale } from './lib'
-import { createContext, ReactNode, useContext } from 'react'
+import { createContext, type ReactNode, useContext } from 'react'
 import { useSession } from '~/components/auth/auth-provider'
 
 const langCtx = createContext<{ lang: LangKey }>({ lang: 'en' })

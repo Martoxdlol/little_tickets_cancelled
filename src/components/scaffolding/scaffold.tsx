@@ -5,10 +5,13 @@ export function Scaffold(props: {
     floatingActionButton?: React.ReactNode
     leftSide?: React.ReactNode
     rightSide?: React.ReactNode
+    appbarFit?: 'above-all' | 'above-children'
 }) {
+    const appbarFit = props.appbarFit || 'above-all'
+
     return (
         <div className="flex h-full w-full flex-col">
-            {props.appbar && (
+            {props.appbar && appbarFit === 'above-all' && (
                 <header className="w-full shrink-0">{props.appbar}</header>
             )}
             <div className="relative flex h-full min-h-0 w-full shrink">
@@ -17,9 +20,14 @@ export function Scaffold(props: {
                         {props.leftSide}
                     </aside>
                 )}
-                <main className="relative h-full min-h-0 w-full shrink">
+                <div className="relative flex-grow min-h-0 shrink">
+                    {props.appbar && appbarFit === 'above-children' && (
+                        <header className="w-full shrink-0 z-10">
+                            {props.appbar}
+                        </header>
+                    )}
                     {props.children}
-                </main>
+                </div>
                 {props.floatingActionButton && (
                     <aside className="absolute bottom-4 right-4 z-10">
                         {props.floatingActionButton}

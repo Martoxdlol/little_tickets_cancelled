@@ -1,5 +1,6 @@
 /** @type {import("eslint").Linter.Config} */
 const config = {
+    ignorePatterns: ['src/components/ui/**'],
     parser: '@typescript-eslint/parser',
     parserOptions: {
         project: true,
@@ -11,6 +12,8 @@ const config = {
         'plugin:@typescript-eslint/stylistic-type-checked',
     ],
     rules: {
+        '@typescript-eslint/no-unsafe-assignment': 'off',
+        '@typescript-eslint/prefer-nullish-coalescing': 'off',
         '@typescript-eslint/array-type': 'off',
         '@typescript-eslint/consistent-type-definitions': 'off',
         '@typescript-eslint/consistent-type-imports': [

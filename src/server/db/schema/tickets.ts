@@ -8,6 +8,8 @@ import {
     version,
 } from './lib'
 import { organizations } from './organizations'
+import { channelMembers } from './roles'
+import { relations } from 'drizzle-orm'
 import { boolean, index, varchar } from 'drizzle-orm/pg-core'
 
 export const updateTypes = [
@@ -75,6 +77,29 @@ export const tickets = createTable(
     }),
 )
 
+export const ticketsRelations = relations(tickets, ({ one }) => ({
+    organization: one(organizations, {
+        fields: [tickets.organizationId],
+        references: [organizations.id],
+    }),
+    channel: one(channels, {
+        fields: [tickets.channelId],
+        references: [channels.id],
+    }),
+    createdByUser: one(users, {
+        fields: [tickets.createdByUserId],
+        references: [users.id],
+    }),
+    assignedToUser: one(users, {
+        fields: [tickets.assignedToUserId],
+        references: [users.id],
+    }),
+    reviewerUser: one(users, {
+        fields: [tickets.reviewerUserId],
+        references: [users.id],
+    }),
+}))
+
 export const ticketUpdates = createTable(
     'ticket_update',
     {
@@ -129,6 +154,15 @@ export const channels = createTable(
         organizationIdIndex: index().on(t.organizationId),
     }),
 )
+
+export const channelRelations = relations(channels, ({ one, many }) => ({
+    organization: one(organizations, {
+        fields: [channels.organizationId],
+        references: [organizations.id],
+    }),
+    tickets: many(tickets),
+    members: many(channelMembers),
+}))
 
 export const categories = createTable(
     'category',

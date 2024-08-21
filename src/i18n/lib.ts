@@ -20,7 +20,7 @@ export class I18NString {
 
     getLang(lang: LangKey): string {
         if (this.values[lang]) {
-            return this.values[lang] as string
+            return this.values[lang]
         }
 
         if (this.values.en) {
