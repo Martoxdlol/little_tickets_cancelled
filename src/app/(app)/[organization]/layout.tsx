@@ -1,5 +1,6 @@
 import { HomeIcon, SquarePenIcon } from 'lucide-react'
-import { ChannelsMenuItems } from '~/components/channels/menu-items'
+import { Suspense } from 'react'
+import { ChannelsMenuItems } from '~/components/channels/channels-menu-items'
 import { Menu, MenuItem } from '~/components/menu'
 import { NewTicketModal } from '~/components/new-ticket-dialog'
 import OrgLayoutSkeleton from '~/components/organizations/layout-skeleton'
@@ -24,7 +25,7 @@ export default function HomeLayout(props: {
                 appbarFit="above-children"
                 leftSide={
                     <DesktopSideNav>
-                        <div className="flex gap-2 items-center mb-2">
+                        <div className="mb-2 flex items-center gap-2">
                             <div className="flex-grow">
                                 <OrganizationSwitcher />
                             </div>
@@ -37,15 +38,22 @@ export default function HomeLayout(props: {
                             </NewTicketModal>
                         </div>
                         <Menu>
-                            <MenuItem icon={<HomeIcon />}>Home</MenuItem>
-                            <ChannelsMenuItems />
+                            <MenuItem
+                                icon={<HomeIcon />}
+                                href={`/${props.params.organization}`}
+                            >
+                                Home
+                            </MenuItem>
+                            <ChannelsMenuItems
+                                orgSlug={props.params.organization}
+                            />
                         </Menu>
                     </DesktopSideNav>
                 }
                 appbar={<Topnav />}
             >
-                <PageContainer className="md:border-l border-t md:bg-secondary md:rounded-tl-md md:dark:border-white/25">
-                    {props.children}
+                <PageContainer className="md:bg-content border-t md:rounded-tl-md md:border-l">
+                    <Suspense fallback="loading...">{props.children}</Suspense>
                 </PageContainer>
             </Scaffold>
         </OrganizationProviderSSR>

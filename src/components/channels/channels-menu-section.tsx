@@ -1,29 +1,21 @@
 'use client'
 
-import { MenuItem, MenuItemSkeleton, MenuSectionTitle } from '../menu'
-import { useOrganization } from '../organizations/organization-provider'
 import { CircleDashedIcon, PlusIcon } from 'lucide-react'
 import { useString } from '~/i18n/react'
-import { api } from '~/trpc/react'
+import { type RouterOutputs } from '~/trpc/react'
+import { MenuItem, MenuItemSkeleton, MenuSectionTitle } from '../menu'
+import { useOrganization } from '../organizations/organization-provider'
 
-export function ChannelsMenuItems() {
+export function ChannelsMenuSection(props: {
+    channels: RouterOutputs['channels']['list']
+}) {
     const org = useOrganization()
     const title = useString('channels')
-
-    const { data: channels, isPending } = api.channels.list.useQuery(
-        {
-            organizationId: org.id,
-        },
-        {
-            retry: Infinity,
-            retryDelay: 5000,
-        },
-    )
 
     return (
         <>
             <MenuSectionTitle>{title}</MenuSectionTitle>
-            {channels?.map((item) => (
+            {props.channels?.map((item) => (
                 <MenuItem
                     key={item.id}
                     href={`/${org.slug}/${item.slug}`}
@@ -32,13 +24,6 @@ export function ChannelsMenuItems() {
                     {item.name}
                 </MenuItem>
             ))}
-            {isPending && (
-                <>
-                    <MenuItemSkeleton />
-                    <MenuItemSkeleton />
-                    <MenuItemSkeleton />
-                </>
-            )}
             <AutoAddChannelMenuItem />
         </>
     )
@@ -53,4 +38,22 @@ export function AutoAddChannelMenuItem() {
     }
 
     return <MenuItem icon={<PlusIcon />}>{title}</MenuItem>
+}
+
+export function ChannelMenuItemSkeleton() {
+    const title = useString('channels')
+
+    return (
+        <>
+            <MenuSectionTitle>{title}</MenuSectionTitle>
+
+            <>
+                <MenuItemSkeleton />
+                <MenuItemSkeleton />
+                <MenuItemSkeleton />
+            </>
+
+            <AutoAddChannelMenuItem />
+        </>
+    )
 }

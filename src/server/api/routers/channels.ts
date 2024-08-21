@@ -3,9 +3,9 @@ import { createTRPCRouter, organizationProcedure } from '~/server/api/trpc'
 import { schema } from '~/server/db'
 
 export const channels = createTRPCRouter({
-    list: organizationProcedure.query(async ({ ctx, input }) => {
+    list: organizationProcedure.query(async ({ ctx }) => {
         const channels = await ctx.db.query.channels.findMany({
-            where: eq(schema.channels.organizationId, input.organizationId),
+            where: eq(schema.channels.organizationId, ctx.organization.id),
             with: {
                 members: {
                     where: eq(

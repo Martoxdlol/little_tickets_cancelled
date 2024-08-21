@@ -7,12 +7,12 @@
  * need to use are documented accordingly near the end.
  */
 import { getServerAuthSession } from '../auth/react'
+import { getOrganizationBySlug } from '../lib'
 import { initTRPC, TRPCError } from '@trpc/server'
-import { eq } from 'drizzle-orm'
 import superjson from 'superjson'
 import { z, ZodError } from 'zod'
 import { createAppStrings } from '~/i18n/strings'
-import { db, schema } from '~/server/db'
+import { db } from '~/server/db'
 
 /**
  * 1. CONTEXT
@@ -135,7 +135,7 @@ export const organizationProcedure = t.procedure
     .use(timingMiddleware)
     .input(
         z.object({
-            organizationId: z.string(),
+            organizationSlug: z.string(),
         }),
     )
     .use(async ({ ctx, input, next }) => {
@@ -149,17 +149,13 @@ export const organizationProcedure = t.procedure
 
         const strings = createAppStrings(session.user.locale)
 
-        const member = await ctx.db.query.organizationMembers.findFirst({
-            where: eq(
-                schema.organizationMembers.organizationId,
-                input.organizationId,
-            ),
-            with: {
-                organization: true,
-            },
-        })
+        const organization = await getOrganizationBySlug(
+            ctx.db,
+            input.organizationSlug,
+            session.userId,
+        )
 
-        if (!member) {
+        if (!organization) {
             throw new TRPCError({
                 code: 'NOT_FOUND',
             })
@@ -170,10 +166,7 @@ export const organizationProcedure = t.procedure
                 ...ctx,
                 strings,
                 session,
-                organization: {
-                    ...member.organization,
-                    role: member.role,
-                },
+                organization,
             },
         })
     })

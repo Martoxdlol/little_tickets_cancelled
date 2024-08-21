@@ -10,7 +10,7 @@ export default function OrgLayoutSkeleton() {
             leftSide={<DesktopSideNav />}
             appbar={<Topnav />}
         >
-            <PageContainer className="md:border-l border-t md:bg-secondary md:rounded-tl-md md:dark:border-white/25"></PageContainer>
+            <PageContainer className="md:bg-content border-t md:rounded-tl-md md:border-l"></PageContainer>
         </Scaffold>
     )
 }

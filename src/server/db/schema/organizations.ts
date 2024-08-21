@@ -1,5 +1,8 @@
-import { boolean, varchar } from 'drizzle-orm/pg-core'
 import { columnId, createTable } from './lib'
+import { channelMembers, organizationMembers } from './roles'
+import { channels } from './tickets'
+import { relations } from 'drizzle-orm'
+import { boolean, varchar } from 'drizzle-orm/pg-core'
 
 export const organizations = createTable('organization', {
     id: columnId,
@@ -18,3 +21,9 @@ export const organizations = createTable('organization', {
         'default_channel_manage_assigned_self',
     ).default(false),
 })
+
+export const organizationsRelations = relations(organizations, ({ many }) => ({
+    channels: many(channels),
+    channelMembers: many(channelMembers),
+    members: many(organizationMembers),
+}))

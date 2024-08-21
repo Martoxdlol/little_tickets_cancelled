@@ -3,6 +3,7 @@ import { z } from 'zod'
 import { slugSchema } from '~/lib/schemas'
 import { createTRPCRouter, protectedProcedure } from '~/server/api/trpc'
 import { schema } from '~/server/db'
+import { getOrganizationBySlug } from '~/server/lib'
 
 export const organizations = createTRPCRouter({
     create: protectedProcedure
@@ -64,34 +65,6 @@ export const organizations = createTRPCRouter({
     getBySlug: protectedProcedure
         .input(z.object({ slug: z.string() }))
         .query(async ({ ctx, input }) => {
-            const [result] = await ctx.db
-                .select({
-                    id: schema.organizations.id,
-                    name: schema.organizations.name,
-                    slug: schema.organizations.slug,
-                    role: schema.organizationMembers.role,
-                })
-                .from(schema.organizations)
-                .innerJoin(
-                    schema.organizationMembers,
-                    and(
-                        eq(schema.organizations.slug, input.slug),
-                        eq(
-                            schema.organizationMembers.organizationId,
-                            schema.organizations.id,
-                        ),
-                        eq(
-                            schema.organizationMembers.userId,
-                            ctx.session.user.id,
-                        ),
-                    ),
-                )
-                .limit(1)
-
-            if (!result) {
-                return null
-            }
-
-            return result
+            return getOrganizationBySlug(ctx.db, input.slug, ctx.session.userId)
         }),
 })
