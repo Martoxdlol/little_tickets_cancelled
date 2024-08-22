@@ -1,13 +1,8 @@
 'use client'
 
 import { useString } from '~/i18n/react'
-import {
-    Dialog,
-    DialogContent,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-} from './ui/dialog'
+import Editor from '../editor'
+import { Dialog, DialogContent, DialogTrigger } from '../ui/dialog'
 
 export function NewTicketModal(props: { children: React.ReactNode }) {
     const newTicketString = useString('newTicket')
@@ -15,11 +10,9 @@ export function NewTicketModal(props: { children: React.ReactNode }) {
     return (
         <Dialog>
             <DialogTrigger asChild>{props.children}</DialogTrigger>
-            <DialogContent>
-                <DialogHeader>
-                    <DialogTitle>{newTicketString}</DialogTitle>
-                </DialogHeader>
-                <div></div>
+            <DialogContent className="flex w-full max-w-[650px] flex-col gap-2 overflow-hidden p-4">
+                <input className="bg-transparent p-0 text-lg outline-0" />
+                <Editor />
             </DialogContent>
         </Dialog>
     )

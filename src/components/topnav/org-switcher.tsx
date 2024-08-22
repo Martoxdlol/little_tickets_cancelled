@@ -1,10 +1,9 @@
 'use client'
 
-import { useOrganization } from '../organizations/organization-provider'
-import { SmallIconButton } from '../ui/custom/icon-button'
 import { ChevronsUpDownIcon, PlusIcon, User } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useMemo } from 'react'
+import { SmallIconButton } from '~/components/ui/custom/icon-button'
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -14,6 +13,7 @@ import {
 } from '~/components/ui/dropdown-menu'
 import { useString } from '~/i18n/react'
 import { api } from '~/trpc/react'
+import { useOrganization } from '../organizations/organization-provider'
 
 export function OrganizationSwitcher() {
     const org = useOrganization()

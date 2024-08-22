@@ -5,11 +5,11 @@ import { TRPCClientError } from '@trpc/client'
 import { Loader2Icon } from 'lucide-react'
 import { useState } from 'react'
 import { z, type ZodSchema } from 'zod'
+import { IconButton } from '~/components/ui/custom/icon-button'
 import { useString } from '~/i18n/react'
 import { nameToSlug, slugSchema } from '~/lib/schemas'
 import { TextFormField } from '../form-fields/text'
 import { Button } from '../ui/button'
-import { IconButton } from '../ui/custom/icon-button'
 
 export function NameSlugForm(props: {
     namePlaceholder?: string
