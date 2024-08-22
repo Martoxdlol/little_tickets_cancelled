@@ -124,7 +124,7 @@ function startEditor(element: HTMLDivElement) {
                 // alert('yey')
                 console.log('APPEND NEW LINE')
                 if (
-                    lisIsEmpty(node.parentNode!) &&
+                    liIsEmpty(node.parentNode!) &&
                     !node.parentNode!.nextSibling
                 ) {
                     const ul = node.parentNode!.parentNode!
@@ -144,13 +144,22 @@ function startEditor(element: HTMLDivElement) {
                 }
 
                 if (
-                    lisIsEmpty(node.parentNode!) &&
+                    liIsEmpty(node.parentNode!) &&
                     node.parentNode!.nextSibling
                 ) {
                     e.preventDefault()
-                    const emptyListItem = createEmptyListItem()
-                    insertAfter(emptyListItem, node.parentNode!)
-                    setSelection(emptyListItem.firstChild!, 0)
+                    // const emptyListItem = createEmptyListItem()
+                    // insertAfter(emptyListItem, node.parentNode!)
+                    // setSelection(emptyListItem.firstChild!, 0)
+                    const ul = node.parentNode!.parentNode! as HTMLUListElement
+                    const newList = splitListAfter(ul, node.parentNode!)
+
+                    if (newList) {
+                        const p = createEmptyParagraph()
+                        insertAfter(p, ul)
+                        insertAfter(newList, p)
+                        ;(node.parentNode! as HTMLElement).remove()
+                    }
                 }
             }
         }
@@ -342,7 +351,7 @@ function insertAfter(node: Node, ref: Node) {
     ref.parentNode!.insertBefore(node, ref.nextSibling)
 }
 
-function lisIsEmpty(node: Node) {
+function liIsEmpty(node: Node) {
     if (node instanceof HTMLLIElement) {
         if (node.childElementCount === 0) {
             return true
@@ -366,4 +375,29 @@ function lisIsEmpty(node: Node) {
     }
 
     return false
+}
+
+function splitListAfter(list: Node, node: Node) {
+    if (!(list instanceof HTMLUListElement)) {
+        return
+    }
+
+    if (node.parentNode !== list) {
+        return
+    }
+
+    const nodes: Node[] = []
+    let sibling = node.nextSibling
+    while (sibling) {
+        nodes.push(sibling)
+        sibling = sibling.nextSibling
+    }
+
+    const newList = document.createElement('ul')
+    for (const node of nodes) {
+        ;(node as HTMLElement).remove()
+        newList.appendChild(node)
+    }
+
+    return newList
 }
