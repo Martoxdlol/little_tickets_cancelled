@@ -68,7 +68,6 @@ function startEditor(element: HTMLDivElement) {
     if (element.getAttribute('editor-initialized') === 'true') {
         return
     }
-
     element.contentEditable = 'true'
     element.setAttribute('editor-initialized', 'true')
 
@@ -96,46 +95,62 @@ function startEditor(element: HTMLDivElement) {
             if (node?.parentNode === element) {
                 return
             }
+            return
+            // if (
+            //     node instanceof HTMLParagraphElement &&
+            //     pos == 0 &&
+            //     node.parentNode! instanceof HTMLLIElement &&
+            //     !node.parentNode.nextElementSibling
+            // ) {
+            //     const li = node.parentNode
+            //     const ul = li.parentNode!
 
-            if (
-                node instanceof HTMLParagraphElement &&
-                pos == 0 &&
-                node.parentNode! instanceof HTMLLIElement &&
-                !node.parentNode.nextElementSibling
-            ) {
-                const li = node.parentNode
-                const ul = li.parentNode!
+            //     console.log(ul, li)
 
-                console.log(ul, li)
+            //     node.remove()
+            //     console.log(ul)
+            //     insertAfter(node, ul)
+            //     e.preventDefault()
+            //     setSelection(node, pos)
 
-                node.remove()
-                console.log(ul)
-                insertAfter(node, ul)
-                e.preventDefault()
-                setSelection(node, pos)
-
-                if (!node.parentNode.previousElementSibling) {
-                    li.remove()
-                }
-            }
+            //     if (!node.parentNode.previousElementSibling) {
+            //         li.remove()
+            //     }
+            // }
         }
 
         if (e.inputType === 'insertParagraph') {
             if (node instanceof HTMLParagraphElement) {
                 // alert('yey')
-                e.preventDefault()
                 console.log('APPEND NEW LINE')
                 if (
-                    node.parentElement instanceof HTMLLIElement &&
-                    !node.nextElementSibling
+                    lisIsEmpty(node.parentNode!) &&
+                    !node.parentNode!.nextSibling
                 ) {
+                    const ul = node.parentNode!.parentNode!
+                    ;(node.parentNode as HTMLLIElement).remove()
+
+                    if (ul.parentNode instanceof HTMLLIElement) {
+                        const emptyListItem = createEmptyListItem()
+                        insertAfter(emptyListItem, ul.parentNode)
+                        setSelection(emptyListItem.firstChild!, 0)
+                    } else {
+                        const p = createEmptyParagraph()
+                        insertAfter(p, ul)
+                        setSelection(p, 0)
+                    }
+
+                    e.preventDefault()
+                }
+
+                if (
+                    lisIsEmpty(node.parentNode!) &&
+                    node.parentNode!.nextSibling
+                ) {
+                    e.preventDefault()
                     const emptyListItem = createEmptyListItem()
-                    node.parentNode!.parentNode!.appendChild(emptyListItem)
+                    insertAfter(emptyListItem, node.parentNode!)
                     setSelection(emptyListItem.firstChild!, 0)
-                } else {
-                    const p = createEmptyParagraph()
-                    insertAfter(p, node)
-                    setSelection(p, 0)
                 }
             }
         }
@@ -172,6 +187,8 @@ function validateTree(node: Node) {
             return false
         }
     }
+
+    validateRejoinLists(node)
 
     return true
 }
@@ -263,7 +280,30 @@ function validateListItemTree(node: Node) {
         }
     }
 
+    validateRejoinLists(node)
+
     return true
+}
+
+function validateRejoinLists(container: HTMLElement) {
+    const children = [...container.childNodes]
+
+    let lastList: HTMLUListElement | undefined
+    for (const child of children) {
+        if (child instanceof HTMLUListElement) {
+            if (lastList) {
+                const listElements = [...child.childNodes]
+                for (const node of listElements) {
+                    node.remove()
+                    lastList.appendChild(node)
+                }
+            } else {
+                lastList = child
+            }
+        } else {
+            lastList = undefined
+        }
+    }
 }
 
 // Creation
@@ -300,4 +340,30 @@ function resetSelection(selection?: Selection | null) {
 
 function insertAfter(node: Node, ref: Node) {
     ref.parentNode!.insertBefore(node, ref.nextSibling)
+}
+
+function lisIsEmpty(node: Node) {
+    if (node instanceof HTMLLIElement) {
+        if (node.childElementCount === 0) {
+            return true
+        }
+
+        if (node.childElementCount === 1) {
+            const p = node.firstChild
+            if (p instanceof HTMLParagraphElement) {
+                if (p.childElementCount === 0) {
+                    return true
+                }
+
+                if (p.childElementCount === 1) {
+                    const br = p.firstChild
+                    if (br instanceof HTMLBRElement) {
+                        return true
+                    }
+                }
+            }
+        }
+    }
+
+    return false
 }
