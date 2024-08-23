@@ -1,5 +1,6 @@
 'use client'
 
+import '@blocknote/shadcn/style.css'
 import dynamic from 'next/dynamic'
 import { useString } from '~/i18n/react'
 import {
