@@ -25,18 +25,21 @@ import {
     MenubarTrigger,
 } from '../ui/menubar'
 
-export function EditorMenubar(props: { pos: { y: number } }) {
+export function EditorMenubar(props: { pos: { y: number; full: boolean } }) {
     const { editor } = useCurrentEditor()
 
     if (!editor) {
         return null
     }
 
+    const full = props.pos.full
+
     return (
         <div
             className="absolute z-10"
             style={{
-                top: `${25 + props.pos.y}px`,
+                top: `${(full ? 105 : 125) + props.pos.y}px`,
+                opacity: full ? 1 : 0.6,
             }}
         >
             <Menubar className="bg-background">
