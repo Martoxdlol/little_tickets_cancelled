@@ -13,6 +13,10 @@ export default function RootLayout({
         >
             <head>
                 <title>Little Tickets</title>
+                <meta
+                    name="viewport"
+                    content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content"
+                />
             </head>
             <body>
                 <TRPCReactProvider>{children}</TRPCReactProvider>
