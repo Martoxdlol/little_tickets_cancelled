@@ -13,9 +13,13 @@ import { CodeHighlightNode, CodeNode } from '@lexical/code'
 import { HashtagNode } from '@lexical/hashtag'
 import { AutoLinkNode, LinkNode } from '@lexical/link'
 import { ListItemNode, ListNode } from '@lexical/list'
+import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext'
 import { HorizontalRuleNode } from '@lexical/react/LexicalHorizontalRuleNode'
 import { HeadingNode, QuoteNode } from '@lexical/rich-text'
 import { TableCellNode, TableNode, TableRowNode } from '@lexical/table'
+import { type SerializedEditorState } from 'lexical'
+import { useEffect, useRef } from 'react'
+import { cn } from '~/lib/utils'
 import { EDITOR_TRANSFORMERS } from './markdow-transformers'
 import { Placeholder } from './placeholder'
 import theme from './theme'
@@ -50,7 +54,12 @@ function onError(error: unknown) {
     console.error(error)
 }
 
-export function Editor() {
+export function Editor(props: {
+    contentClassName?: string
+    onChange: (editorState: SerializedEditorState) => void
+    initialValue?: SerializedEditorState
+    toolbarClassName?: string
+}) {
     const initialConfig = {
         namespace: 'MyEditor',
         theme,
@@ -81,7 +90,12 @@ export function Editor() {
             <div className="relative">
                 <RichTextPlugin
                     contentEditable={
-                        <ContentEditable className="outline-none" />
+                        <ContentEditable
+                            className={cn(
+                                'outline-none',
+                                props.contentClassName,
+                            )}
+                        />
                     }
                     ErrorBoundary={LexicalErrorBoundary}
                     placeholder={
@@ -95,7 +109,51 @@ export function Editor() {
             <CheckListPlugin />
             <AutoLinkPlugin matchers={MATCHERS} />
             <MarkdownShortcutPlugin transformers={EDITOR_TRANSFORMERS} />
-            <Toolbar />
+            <Toolbar className={props.toolbarClassName} />
+            <EditorValue
+                onChange={props.onChange}
+                initialValue={props.initialValue}
+            />
         </LexicalComposer>
     )
+}
+
+function EditorValue(props: {
+    initialValue?: SerializedEditorState
+    onChange: (editorState: SerializedEditorState) => void
+}) {
+    const [editor] = useLexicalComposerContext()
+
+    useEffect(() => {
+        const unregister = editor.registerUpdateListener(({ editorState }) => {
+            editorState.read(() => {
+                props.onChange(editor.toJSON().editorState)
+            })
+        })
+
+        return () => {
+            unregister()
+        }
+    }, [editor, props])
+
+    const initialValueSetRef = useRef(false)
+
+    useEffect(() => {
+        if (!props.initialValue) {
+            return
+        }
+
+        // set initial data
+        editor.update(() => {
+            if (!props.initialValue || initialValueSetRef.current) {
+                return
+            }
+
+            const editorState = editor.parseEditorState(props.initialValue)
+            editor.setEditorState(editorState)
+            initialValueSetRef.current = true
+        })
+    }, [editor, props])
+
+    return null
 }

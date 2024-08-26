@@ -13,14 +13,16 @@ import {
     ListTodoIcon,
     QuoteIcon,
     Redo2Icon,
+    RemoveFormattingIcon,
     StrikethroughIcon,
-    TypeIcon,
+    UnderlineIcon,
     Undo2Icon,
 } from 'lucide-react'
-import { SmallIconButton } from '../ui/custom/icon-button'
+import { cn } from '~/lib/utils'
+import { IconButton } from '../ui/custom/icon-button'
 import { useToolbarState } from './toolbar-state'
 
-export function Toolbar() {
+export function Toolbar(props: { className?: string }) {
     const [editor] = useLexicalComposerContext()
 
     const focusEditor = () => {
@@ -29,124 +31,133 @@ export function Toolbar() {
 
     const toolbar = useToolbarState()
 
-    const iconSize = 18
-
     return (
         <div
             onClick={() => focusEditor()}
-            className="absolute bottom-0 left-0 right-0 flex flex-nowrap items-center overflow-x-auto border-t sm:static sm:border-none sm:bg-transparent [&>*]:shrink-0"
+            className={cn(
+                'editor-toolbar flex flex-nowrap overflow-x-auto [&>*]:shrink-0',
+                props.className,
+            )}
         >
-            <SmallIconButton
+            <IconButton
                 variant={toolbar.isBold ? 'secondary' : 'ghost'}
                 size="icon"
-                icon={<BoldIcon size={iconSize} />}
+                icon={<BoldIcon />}
                 onClick={() => toolbar.formatBold()}
             />
 
-            <SmallIconButton
+            <IconButton
                 variant={toolbar.isItalic ? 'secondary' : 'ghost'}
                 size="icon"
-                icon={<ItalicIcon size={iconSize} />}
+                icon={<ItalicIcon />}
                 onClick={() => toolbar.formatItalic()}
             />
 
-            <SmallIconButton
+            <IconButton
+                variant={toolbar.isUnderline ? 'secondary' : 'ghost'}
+                size="icon"
+                icon={<UnderlineIcon />}
+                onClick={() => toolbar.formatUnderline()}
+            />
+
+            <IconButton
                 variant={toolbar.isStrikethrough ? 'secondary' : 'ghost'}
                 size="icon"
-                icon={<StrikethroughIcon size={iconSize} />}
+                icon={<StrikethroughIcon />}
                 onClick={() => toolbar.formatStrikethrough()}
             />
 
-            <SmallIconButton
+            <IconButton
                 variant={toolbar.isCode ? 'secondary' : 'ghost'}
                 size="icon"
-                icon={<CodeIcon size={iconSize} />}
+                icon={<CodeIcon />}
                 onClick={() => toolbar.formatCode()}
             />
 
-            <SmallIconButton
+            <IconButton
                 variant={toolbar.isCodeBlock ? 'secondary' : 'ghost'}
                 size="icon"
-                icon={<FileCode2Icon size={iconSize} />}
+                icon={<FileCode2Icon />}
                 onClick={() => toolbar.formatCodeBlock()}
             />
 
-            <SmallIconButton
+            <IconButton
                 variant="ghost"
                 size="icon"
-                icon={<QuoteIcon size={iconSize} />}
+                icon={<QuoteIcon />}
                 onClick={() => toolbar.formatQuote()}
             />
 
-            <SmallIconButton
+            <IconButton
                 size="icon"
                 variant="ghost"
-                icon={<CornerDownLeftIcon size={iconSize} />}
+                icon={<CornerDownLeftIcon />}
                 onClick={() => toolbar.insertLineBreak()}
             />
 
-            <SmallIconButton
+            <IconButton
                 variant={toolbar.isBullet ? 'secondary' : 'ghost'}
                 size="icon"
-                icon={<ListIcon size={iconSize} />}
+                icon={<ListIcon />}
                 onClick={() => toolbar.formatBulletList()}
             />
 
-            <SmallIconButton
+            <IconButton
                 variant={toolbar.isCheck ? 'secondary' : 'ghost'}
                 size="icon"
-                icon={<ListTodoIcon size={iconSize} />}
+                icon={<ListTodoIcon />}
                 onClick={() => toolbar.formatCheckList()}
             />
 
-            <SmallIconButton
+            <IconButton
                 variant={toolbar.isNumber ? 'secondary' : 'ghost'}
                 size="icon"
-                icon={<ListOrderedIcon size={iconSize} />}
+                icon={<ListOrderedIcon />}
                 onClick={() => toolbar.formatNumberedList()}
             />
 
-            <SmallIconButton
+            <IconButton
                 size="icon"
-                variant={toolbar.isParagraph ? 'secondary' : 'ghost'}
-                icon={<TypeIcon size={iconSize} />}
+                // variant={toolbar.isParagraph ? 'secondary' : 'ghost'}
+                variant="ghost"
+                icon={<RemoveFormattingIcon />}
                 onClick={() => toolbar.formatParagraph()}
             />
 
-            <SmallIconButton
+            <IconButton
                 size="icon"
                 variant={toolbar.isH1 ? 'secondary' : 'ghost'}
-                icon={<Heading1Icon size={iconSize} />}
+                icon={<Heading1Icon />}
                 onClick={() => toolbar.formatH1()}
             />
 
-            <SmallIconButton
+            <IconButton
                 size="icon"
                 variant={toolbar.isH2 ? 'secondary' : 'ghost'}
-                icon={<Heading2Icon size={iconSize} />}
+                icon={<Heading2Icon />}
                 onClick={() => toolbar.formatH2()}
             />
 
-            <SmallIconButton
+            <IconButton
                 size="icon"
                 variant={toolbar.isH3 ? 'secondary' : 'ghost'}
-                icon={<Heading3Icon size={iconSize} />}
+                icon={<Heading3Icon />}
                 onClick={() => toolbar.formatH3()}
             />
 
-            <SmallIconButton
+            <IconButton
                 size="icon"
                 variant="ghost"
                 disabled={!toolbar.canUndo}
-                icon={<Undo2Icon size={iconSize} />}
+                icon={<Undo2Icon />}
                 onClick={() => toolbar.undo()}
             />
 
-            <SmallIconButton
+            <IconButton
                 size="icon"
                 variant="ghost"
                 disabled={!toolbar.canRedo}
-                icon={<Redo2Icon size={iconSize} />}
+                icon={<Redo2Icon />}
                 onClick={() => toolbar.redo()}
             />
         </div>

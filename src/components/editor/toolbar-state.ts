@@ -253,6 +253,8 @@ export function useToolbarState() {
                 const selection = $getSelection()
                 $setBlocksType(selection, () => $createHeadingNode(headingSize))
             })
+        } else {
+            formatParagraph()
         }
     }
 
